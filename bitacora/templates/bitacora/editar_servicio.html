@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" class="bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <title>Editando Servicio - Bitácora</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+</head>
+<body class="font-sans">
+    <div class="container mx-auto mt-10 px-4">
+        
+        <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto mb-12">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">Editando Servicio para: {{ servicio.cliente }}</h1>
+            
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label for="cliente" class="block text-sm font-medium text-gray-700">Cliente:</label>
+                    <input type="text" id="cliente" name="cliente" value="{{ servicio.cliente }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha:</label>
+                        <input type="date" id="fecha" name="fecha" value="{{ servicio.fecha|date:'Y-m-d' }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad:</label>
+                        <input type="number" id="cantidad" name="cantidad" value="{{ servicio.cantidad }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" required rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">{{ servicio.descripcion_servicio }}</textarea>
+                </div>
+
+                <div class="flex items-center justify-end space-x-4 pt-4">
+                    <a href="{% url 'detalle_servicio' servicio.id %}" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
