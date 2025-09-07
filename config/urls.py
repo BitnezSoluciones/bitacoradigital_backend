@@ -19,5 +19,6 @@ from django.urls import path, include #!Añadimos,'include'!
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('bitacora.urls')), #Esta es la nueva línea mágica.
-]
+    # Asegúrate de que esta línea apunte a 'bitacora.urls'
+    path('api/', include('bitacora.urls')),
+    ]
