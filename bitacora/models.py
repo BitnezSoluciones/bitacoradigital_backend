@@ -1,18 +1,24 @@
+# bitacora/models.py
+
 from django.db import models
 
-# Create your models here.
-class Servicio(models.Model):
-    #Campo para texto corto. 'max-lenght' es obligatorio.
+# Modelo para el "encabezado": El cliente y la fecha general del servicio.
+class Bitacora(models.Model):
     cliente = models.CharField(max_length=200)
-
-    #Campo para guardar una fecha.
     fecha = models.DateField()
 
-    #Campo para guardar números enteros
-    cantidad = models.IntegerField()
+    def __str__(self):
+        return f"Bitácora para {self.cliente} del {self.fecha}"
 
-    #Campo para texto largo, ideal para descripciones detalladas.
-    descripcion_servicio = models.TextField()
+# Modelo para las "líneas": Cada servicio o producto individual.
+class Partida(models.Model):
+    # La relación clave: Cada partida PERTENECE a UNA Bitacora.
+    # on_delete=models.CASCADE significa que si se borra una Bitacora,
+    # todas sus partidas asociadas también se borrarán.
+    bitacora = models.ForeignKey(Bitacora, related_name='partidas', on_delete=models.CASCADE)
+
+    cantidad = models.IntegerField()
+    descripcion = models.TextField()
 
     def __str__(self):
-        return f"Servicio para {self.cliente} en fecha {self.fecha}"
+        return f"Partida de {self.cantidad} para {self.bitacora.cliente}"

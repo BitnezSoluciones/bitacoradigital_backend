@@ -1,7 +1,18 @@
+# bitacora/admin.py
+
 from django.contrib import admin
-from .models import Servicio #Importamos nuestro modelo que creamos antes
+# 1. Importa los NUEVOS modelos
+from .models import Bitacora, Partida 
 
-# Register your models here.
+# Opcional: Esto mejora la visualización en el panel de admin
+# Permite ver y añadir Partidas directamente desde la Bitácora.
+class PartidaInline(admin.TabularInline):
+    model = Partida
+    extra = 1 # Muestra 1 campo extra para añadir partidas por defecto
 
-#Esta línea le dice a Django: "Muestra el modelo 'Servicio' en el panel de admin"
-admin.site.register(Servicio)
+class BitacoraAdmin(admin.ModelAdmin):
+    inlines = [PartidaInline]
+
+# 2. Registra los nuevos modelos en el panel de administración
+admin.site.register(Bitacora, BitacoraAdmin)
+admin.site.register(Partida)
