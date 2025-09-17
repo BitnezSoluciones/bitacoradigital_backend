@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bitacora',         # <-- Este es el nombre correcto de tu app
+    'django_filters',
     'rest_framework',   # Django REST Framework
+    'rest_framework.authtoken',
     'corsheaders',      # Django CORS Headers
 ]
 
@@ -132,3 +134,7 @@ CORS_ALLOWED_ORIGINS = [
 
 # Permite que las cookies (como la de CSRF) se envíen desde el frontend
 CORS_ALLOW_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

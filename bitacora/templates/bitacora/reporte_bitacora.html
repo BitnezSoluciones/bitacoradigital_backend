@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Servicio</title>
+    <style>
+        @page { size: letter; margin: 1in; }
+        body { font-family: Arial, sans-serif; font-size: 12pt; color: #333; }
+        h1 { text-align: center; color: #1230be; }
+        h2 { color: #333; border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .header { margin-bottom: 40px; text-align: center; }
+        .client-info p { line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Reporte de Servicio</h1>
+    </div>
+
+    <div class="client-info">
+        <h2>Datos Generales</h2>
+        <p><strong>Cliente:</strong> {{ bitacora.cliente }}</p>
+        <p><strong>Fecha:</strong> {{ bitacora.fecha }}</p>
+    </div>
+
+    <h2>Detalle de Partidas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">Cantidad</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for partida in bitacora.partidas.all %}
+            <tr>
+                <td>{{ partida.cantidad }}</td>
+                <td>{{ partida.descripcion }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

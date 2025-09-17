@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include #!Añadimos,'include'!
+from rest_framework.authtoken import views # <-- 1. IMPORTA la vista de tokens
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Asegúrate de que esta línea apunte a 'bitacora.urls'
     path('api/', include('bitacora.urls')),
-    ]
+    # Al hacer un POST a /api-token-auth/ con 'username' y 'password',
+    # devolverá el token del usuario.
+    path('api-token-auth/', views.obtain_auth_token, name='api_token_auth'),
+]
