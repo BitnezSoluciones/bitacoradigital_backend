@@ -26,6 +26,14 @@ class BitacoraViewSet(viewsets.ModelViewSet):
         # al usuario autenticado (el técnico) al campo 'tecnico'.
         serializer.save(tecnico=self.request.user)
 
+        def get_serializer_context(self):
+        # Pasa el objeto 'request' completo al serializer.
+        # Esto le da al serializer acceso al usuario que hace la petición.
+            return {'request': self.request}
+
+    def perform_create(self, serializer):
+        serializer.save(tecnico=self.request.user)
+
 def generar_reporte_pdf(request, pk):
     try:
         # Obtenemos la bitácora específica por su ID (pk)

@@ -3,27 +3,37 @@
 from rest_framework import serializers
 from .models import Bitacora, Partida
 
-class PartidaSerializer(serializers.ModelSerializer):
-    # Añadimos 'id' y lo hacemos de solo lectura para las actualizaciones
-    id = serializers.IntegerField(read_only=True, required=False)
+# Serializer para el rol de TÉCNICO (sin el campo 'costo')
+class TecnicoPartidaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partida
         fields = ['id', 'cantidad', 'descripcion']
 
+# Serializer para el rol de ADMINISTRADOR (con el campo 'costo')
+class AdminPartidaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partida
+        fields = ['id', 'cantidad', 'descripcion', 'costo']
+
 class BitacoraSerializer(serializers.ModelSerializer):
-    partidas = PartidaSerializer(many=True)
+    # La magia: decidimos qué serializer de partida usar basado en el rol del usuario
+    partidas = serializers.SerializerMethodField()
 
     class Meta:
         model = Bitacora
-        fields = ['id', 'cliente', 'fecha', 'partidas']
+        fields = ['id', 'cliente', 'fecha', 'tecnico', 'partidas']
 
-    # El método create que ya teníamos
-    def create(self, validated_data):
-        partidas_data = validated_data.pop('partidas')
-        bitacora = Bitacora.objects.create(**validated_data)
-        for partida_data in partidas_data:
-            Partida.objects.create(bitacora=bitacora, **partida_data)
-        return bitacora
+    def get_partidas(self, obj):
+        # Obtenemos el usuario que está haciendo la petición desde el "contexto"
+        request = self.context.get('request')
+        if request and request.user.is_staff:
+            # Si es staff (admin), usa el serializer con costos
+            serializer = AdminPartidaSerializer(obj.partidas.all(), many=True)
+        else:
+            # Si no, usa el serializer sin costos
+            serializer = TecnicoPartidaSerializer(obj.partidas.all(), many=True)
+        return serializer.data
+
 
     # +++ MÉTODO NUEVO Y MEJORADO PARA ACTUALIZAR +++
     def update(self, instance, validated_data):
