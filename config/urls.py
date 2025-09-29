@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include #!Añadimos,'include'!
 from rest_framework.authtoken import views # <-- 1. IMPORTA la vista de tokens
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,3 +28,8 @@ urlpatterns = [
     # devolverá el token del usuario.
     path('api-token-auth/', views.obtain_auth_token, name='api_token_auth'),
 ]
+
+# Esto le dice a Django que sirva los archivos de la carpeta 'static'
+# solo cuando estamos en modo DEBUG (desarrollo).
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

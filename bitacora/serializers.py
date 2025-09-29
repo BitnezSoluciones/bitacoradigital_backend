@@ -1,5 +1,6 @@
 # bitacora/serializers.py
 
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Bitacora, Partida
 
@@ -34,7 +35,6 @@ class BitacoraSerializer(serializers.ModelSerializer):
             serializer = TecnicoPartidaSerializer(obj.partidas.all(), many=True)
         return serializer.data
 
-
     # +++ MÉTODO NUEVO Y MEJORADO PARA ACTUALIZAR +++
     def update(self, instance, validated_data):
         # Obtenemos los datos de las partidas que vienen del frontend
@@ -65,4 +65,9 @@ class BitacoraSerializer(serializers.ModelSerializer):
                 # Si no tiene ID, es una partida nueva que se debe crear
                 Partida.objects.create(bitacora=instance, **partida_data)
 
-        return instance
+from django.contrib.auth.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'is_staff']

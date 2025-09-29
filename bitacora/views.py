@@ -1,10 +1,12 @@
-# bitacora/views.py
+# bitacora/views.
 
-from rest_framework import viewsets
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated 
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from .serializers import UserSerializer # Importa el nuevo serializer
+from rest_framework import viewsets
+from rest_framework.views import APIView
 from .models import Bitacora
 from .serializers import BitacoraSerializer
 from django.http import HttpResponse
@@ -13,6 +15,13 @@ from xhtml2pdf import pisa
 from io import BytesIO
 from .filters import BitacoraFilter
 from django.db.models import Sum, Count
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication]) # <-- ESTA LÍNEA FALTABA
+@permission_classes([IsAuthenticated])
+def current_user_view(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
 
 class BitacoraViewSet(viewsets.ModelViewSet):
     queryset = Bitacora.objects.all().order_by('-fecha')

@@ -4,6 +4,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import BitacoraViewSet, generar_reporte_pdf
 from .views import ReporteFacturacionView
+from .views import current_user_view
+
 
 # Creamos un router y registramos nuestro ViewSet con él.
 router = DefaultRouter()
@@ -14,4 +16,5 @@ urlpatterns = [
     path('bitacoras/resumen/', ReporteFacturacionView.as_view(), name='bitacora-resumen'),
     path('bitacoras/<int:pk>/reporte/', generar_reporte_pdf, name='bitacora-reporte-pdf'),
     path('', include(router.urls)),
+    path('current_user/', current_user_view, name='current-user'),
 ]
